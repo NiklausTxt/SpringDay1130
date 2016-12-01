@@ -62,9 +62,17 @@ public abstract class AbstractBeanFactory implements BeanFactory{
 	}
 	
 	protected void resovleDependence(Object instance) {
-		Class<?> clazz = instance.getClass();
+		Field[] fields =null;
+		if(!(instance instanceof Class)){
+			Class<?> clazz = instance.getClass();
+			fields = clazz.getDeclaredFields();
+			
+		}else{
+			Class<?> clazz = (Class<?>) instance;
+			fields = clazz.getDeclaredFields();
+		}
+		
 
-		Field[] fields = clazz.getDeclaredFields();
 		for(Field f:fields){
 			if(!f.isAnnotationPresent(Bean.class)){
 				continue;
@@ -79,10 +87,21 @@ public abstract class AbstractBeanFactory implements BeanFactory{
 			if(injectedObject==null){
 				throw new RuntimeException("The injected bean is not defined! Bean name: " + injectedBeanName);
 			}
-			
-			invokeSetterMethod(instance, f, injectedObject);
+			if(!(instance instanceof Class)){
+				invokeSetterMethod(instance, f, injectedObject);
+			}else{
+				try {
+					Object obj = ((Class<?>) instance).newInstance();
+					invokeSetterMethod(obj, f, injectedObject);
+				} catch (InstantiationException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
+	
+	
 
 
 	private void invokeSetterMethod(Object instance, Field field, Object injectedObject) {

@@ -1,11 +1,12 @@
 package com.nik.di.bean;
 
 import com.nik.di.annotation.Bean;
+import com.nik.di.annotation.Singleton;
 
-@Bean("hello")
+@Bean(value="hello")
 public class HelloBean {
     
-    @Bean("person")
+    @Bean(value="person")
     private Person person;
 
     public void sayHello() {

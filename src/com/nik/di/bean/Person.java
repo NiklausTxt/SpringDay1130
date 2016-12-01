@@ -2,7 +2,7 @@ package com.nik.di.bean;
 
 import com.nik.di.annotation.Bean;
 
-@Bean("person")
+@Bean(value="person")
 public class Person {
 
     private String name = "No ONE";

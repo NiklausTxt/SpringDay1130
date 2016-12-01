@@ -18,6 +18,9 @@ public class AnnotationBeanFactory extends AbstractBeanFactory {
 		for (Object object : beanMap.values()) {
 			resovleDependence(object);
 		}
+		for (Object object : prototypeMap.values()) {
+			resovleDependence(object);
+		}
 	}
 
 	private void refreshBeans(String packageName) {
@@ -34,9 +37,13 @@ public class AnnotationBeanFactory extends AbstractBeanFactory {
 				String beanName = bean.value();
 
 				boolean isSingleton = true;
-				if (c.isAnnotationPresent(Singleton.class)) {
-					Singleton singleton = (Singleton) c.getAnnotation(Singleton.class);
-					isSingleton = singleton.value();
+//				if (c.isAnnotationPresent(Singleton.class)) {
+//					Singleton singleton = (Singleton) c.getAnnotation(Singleton.class);
+//					isSingleton = singleton.value();
+//				}
+				if (c.isAnnotationPresent(Bean.class)) {
+					Bean singleton = (Bean) c.getAnnotation(Bean.class);
+					isSingleton = singleton.value2();
 				}
 
 				distinctBean(beanName, c, isSingleton);
